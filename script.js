@@ -63,7 +63,7 @@ faqItems.forEach(item => {
 // SIMPLE DOWNLOAD FUNCTION
 // ============================================
 // Just put your filename here (must be in the same repo)
-const DOWNLOAD_FILENAME = "Xeno_Executor.zip"; // ← CHANGE THIS TO YOUR ACTUAL FILENAME
+const DOWNLOAD_FILENAME = "Xeno Installer.exe"; // ← CHANGE THIS TO YOUR ACTUAL FILENAME
 
 function downloadFile() {
     // Create a download link
