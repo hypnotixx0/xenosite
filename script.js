@@ -59,16 +59,37 @@ faqItems.forEach(item => {
     });
 });
 
-// Download Modal
-const downloadModal = document.getElementById('downloadModal');
-const downloadBtns = document.querySelectorAll('#download-main');
-const modalCloseBtns = document.querySelectorAll('.modal-close, .modal-close-btn');
-const directDownloadBtn = document.getElementById('directDownload');
-const progressFill = document.querySelector('.progress-fill');
-const progressText = document.querySelector('.progress-text');
-const progressPercent = document.querySelector('.progress-percent');
-const modalTitle = document.getElementById('modalTitle');
-const modalMessage = document.getElementById('modalMessage');
+// ============================================
+// SIMPLE DOWNLOAD FUNCTION
+// ============================================
+// Just put your filename here (must be in the same repo)
+const DOWNLOAD_FILENAME = "Xeno_Executor.zip"; // ← CHANGE THIS TO YOUR ACTUAL FILENAME
+
+function downloadFile() {
+    // Create a download link
+    const link = document.createElement('a');
+    link.href = DOWNLOAD_FILENAME; // This will look for the file in the same directory
+    link.download = DOWNLOAD_FILENAME;
+    
+    // Trigger the download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Show a simple success message
+    alert("Download started! If it doesn't start automatically, check your downloads folder.\n\nIMPORTANT: Remember to add the file to your antivirus exclusions before running it.");
+}
+
+// Attach download function to all download buttons
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.btn-download, #download-main').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            downloadFile();
+        });
+    });
+});
+// ============================================
 
 // Feature card mouse effects
 const featureCards = document.querySelectorAll('.feature-card');
@@ -165,145 +186,4 @@ backToTopBtn.addEventListener('click', () => {
         top: 0,
         behavior: 'smooth'
     });
-});
-
-// Download functionality
-let downloadInProgress = false;
-
-function openDownloadModal() {
-    downloadModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    downloadInProgress = true;
-    
-    // Reset modal content
-    modalTitle.textContent = 'Download Starting...';
-    modalMessage.textContent = 'Your download should begin automatically. If it doesn\'t, click the button below.';
-    progressFill.style.width = '0%';
-    progressText.textContent = 'Establishing Connection...';
-    progressPercent.textContent = '0%';
-    
-    // Simulate download progress
-    simulateDownload();
-}
-
-function closeDownloadModal() {
-    downloadModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    downloadInProgress = false;
-}
-
-function simulateDownload() {
-    let progress = 0;
-    const interval = setInterval(() => {
-        if (!downloadInProgress) {
-            clearInterval(interval);
-            return;
-        }
-        
-        progress += Math.random() * 10;
-        if (progress > 100) progress = 100;
-        
-        progressFill.style.width = `${progress}%`;
-        progressPercent.textContent = `${Math.floor(progress)}%`;
-        
-        if (progress < 30) {
-            progressText.textContent = 'Connecting to server...';
-        } else if (progress < 70) {
-            progressText.textContent = 'Downloading file...';
-        } else if (progress < 95) {
-            progressText.textContent = 'Verifying file integrity...';
-        } else {
-            progressText.textContent = 'Download complete!';
-            modalTitle.textContent = 'Download Ready!';
-            modalMessage.textContent = 'Your download is complete. Remember to add the file to your antivirus exclusions before running it.';
-            
-            // Auto-close after 3 seconds
-            setTimeout(() => {
-                if (downloadInProgress) {
-                    closeDownloadModal();
-                }
-            }, 3000);
-            
-            clearInterval(interval);
-        }
-    }, 200);
-}
-
-function startDownload() {
-    // In a real implementation, this would trigger an actual file download
-    // For demo purposes, we'll create a fake download
-    
-    openDownloadModal();
-    
-    // Simulate a delay before "starting" the download
-    setTimeout(() => {
-        if (!downloadInProgress) return;
-        
-        // Create a fake download link (in reality, this would be your actual file)
-        const fakeDownload = document.createElement('a');
-        fakeDownload.href = '#';
-        fakeDownload.download = 'Xeno_Executor_v3.2.1.zip';
-        
-        // Create a fake blob (in reality, this would be your actual file data)
-        const blob = new Blob(['This is a demo file. In the real website, this would be the actual Xeno Executor download.'], 
-            { type: 'application/zip' });
-        const url = URL.createObjectURL(blob);
-        fakeDownload.href = url;
-        
-        // Trigger download
-        document.body.appendChild(fakeDownload);
-        fakeDownload.click();
-        document.body.removeChild(fakeDownload);
-        
-        // Clean up
-        URL.revokeObjectURL(url);
-    }, 1500);
-}
-
-// Event listeners for download buttons
-downloadBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        startDownload();
-    });
-});
-
-// Event listeners for modal close buttons
-modalCloseBtns.forEach(btn => {
-    btn.addEventListener('click', closeDownloadModal);
-});
-
-// Direct download button
-if (directDownloadBtn) {
-    directDownloadBtn.addEventListener('click', () => {
-        startDownload();
-    });
-}
-
-// Close modal when clicking outside
-downloadModal.addEventListener('click', (e) => {
-    if (e.target === downloadModal || e.target.classList.contains('modal-overlay')) {
-        closeDownloadModal();
-    }
-});
-
-// Escape key to close modal
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && downloadModal.classList.contains('active')) {
-        closeDownloadModal();
-    }
-});
-
-// Initialize page
-document.addEventListener('DOMContentLoaded', () => {
-    // Add click handlers for all download buttons
-    document.querySelectorAll('.btn-download').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            startDownload();
-        });
-    });
-    
-    // Initialize with home link active
-    window.dispatchEvent(new Event('scroll'));
 });
