@@ -63,7 +63,7 @@ faqItems.forEach(item => {
 // SIMPLE DOWNLOAD FUNCTION
 // ============================================
 // Just put your filename here (must be in the same repo)
-const DOWNLOAD_FILENAME = "Xeno-v1.3.25.exe"; // ← CHANGE THIS TO YOUR ACTUAL FILENAME
+const DOWNLOAD_FILENAME = "Xeno-v1.3.25b.zip"; // ← CHANGE THIS TO YOUR ACTUAL FILENAME
 
 function downloadFile() {
     // Create a download link
